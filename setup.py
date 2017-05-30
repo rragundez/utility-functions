@@ -2,15 +2,13 @@ from setuptools import find_packages
 from setuptools import setup
 
 setup(
-    name='utilityfunctions',
-
+    # package details
+    name='rod_ufuncs',
     version='0.1',
+    description='Collection of generic useful functions.',
+    packages=find_packages(),
 
-    description='Collection of generic useful functions',
-
-    # Author details
+    # author details
     author='Rodrigo Agundez',
     author_email='rragundez@gmail.com',
-
-    packages=find_packages(),
 )
