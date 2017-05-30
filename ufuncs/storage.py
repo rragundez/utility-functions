@@ -1,5 +1,6 @@
 import os
 import pickle
+import logging
 
 from pathlib import PurePath
 
@@ -89,5 +90,23 @@ def s3_exists(fullpath, raise_error=False):
             exists = False
         else:
             exists = True
-
     return exists
+
+
+def hdfs_chmod_dirs(path, permission, hdfs3_obj=None):
+    """Change permissions of each direcctory in the fullpath
+
+    Args:
+        path (str): Path in HDFS
+        permission (int/str): Permission code (eg. 777, 775)
+        hdfs3_obj (hdfs3.HDFileSystem): HDFS connector
+    """
+    hdfs = hdfs3_obj if hdfs3_obj else hdfs3.HDFileSystem()
+    _path = '/'
+    for d in path.split('/')[1:]:
+        _path = os.path.join(_path, d)
+        try:
+            hdfs.chmod(_path, int(str(permission), 8))
+        except IOError as e:
+            logging.warning("Cannot change permissions of {}: "
+                            "{}".format(_path, str(e)))
