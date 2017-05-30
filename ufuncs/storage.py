@@ -25,8 +25,8 @@ def from_local(fullpath):
         return obj
 
 
-def to_hdfs(obj, fullpath, permission_code=755, overwrite=True):
-    hdfs = hdfs3.HDFileSystem()
+def to_hdfs(obj, fullpath, hdfs3_obj=None, permission=755, overwrite=True):
+    hdfs = hdfs3_obj if hdfs3_obj else hdfs3.HDFileSystem()
     if overwrite or not hdfs.exists(fullpath):
         hdfs.mkdir(os.path.dirname(fullpath))
         with hdfs.open(fullpath, 'wb') as f:
@@ -37,7 +37,8 @@ def to_hdfs(obj, fullpath, permission_code=755, overwrite=True):
                       "is {}".format(fullpath, overwrite))
 
 
-def from_hdfs(fullpath):
+def from_hdfs(fullpath, hdfs3_obj=None):
+    hdfs = hdfs3_obj if hdfs3_obj else hdfs3.HDFileSystem()
     hdfs = hdfs3.HDFileSystem()
     with hdfs.open(fullpath, 'rb') as f:
         obj = pickle.loads(f.read())
