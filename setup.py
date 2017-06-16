@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     # package details
-    name='rod_ufuncs',
+    name='rod-ufuncs',
     version='0.1',
     description='Collection of generic useful functions.',
     packages=find_packages(),
