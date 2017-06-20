@@ -8,4 +8,4 @@ def check_abs_path(path):
         TypeError: If path is not absolute.
     """
     if not os.path.isabs(path):
-        raise TypeError("Path '{}' is not absolute.")
+        raise TypeError("Path '{}' is not absolute.".format(path))
