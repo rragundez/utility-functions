@@ -147,3 +147,27 @@ def s3_get_object(storage_path, *, s3_conn=None, **kwargs):
     except AttributeError as _:
         raise NameError("Pickle file object class not found in the namespace.")
     return obj
+
+def s3_csv_to_df(storage_path, *, s3_conn=None, **kwargs):
+    """Retrieve a python object from a pickle file in s3.
+    Args:
+        storage_path (str): s3 full path of the file to write to.
+            This path is compose by '/<bucket>/<key>'.
+        s3_conn (boto3.resources.factory.s3.ServiceResource): s3 connector.
+    Returns:
+        The python object that was loaded from the pickle file.
+    Raises:
+        TypeError: If storage_path given is not absolute.
+        NameError: If the object's class is not defined in the namespace.
+        BucketNotFoundError: If bucket not found.
+        KeyNotFoundError: If key not found in bucket.
+    """
+    check_abs_path(storage_path)
+    s3 = s3_conn if s3_conn else boto3.resource('s3',
+                                                region_name=kwargs.pop('region_name', None))
+    # raise exceptions if bucket or key don't exist
+    s3_exists(storage_path, raise_error=True, s3_conn=s3)
+    bucket_name, key = s3_split_path(storage_path)
+    contents = s3.Object(bucket_name, key).get()['Body'].read().decode('utf-8')
+    df = pd.read_csv(io.StringIO(contents), **kwargs)
+    return df
