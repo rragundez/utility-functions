@@ -1,3 +1,20 @@
+import requests
+import asyncio
+import logging
+
+@asyncio.coroutine
+def post_request_async(session, url, request):
+    with aiohttp.Timeout(30):
+        response = yield from session.post(url, json=request)
+        try:
+            return (yield from response.json())
+        except Exception as e:
+            print("Error")
+            raise(e)
+        finally:
+            yield from response.release()
+
+
 def post_request(*, url, request):
     """Make an API post call and return response as dictionary.
 
