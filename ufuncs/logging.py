@@ -14,7 +14,6 @@ def activate_logging(*, log_path=None, level=20):
             30 - WARNING
             20 - INFO
             10 - DEBUG
-        config (dict): Configuration parameters of the project
     """
     # define logging output
     log_formatter = logging.Formatter("%(asctime)s - "
