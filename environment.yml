@@ -1,4 +1,4 @@
-name: rod-ufuncs
+name: ufuncs
 channels:
 - conda-forge
 - defaults
